@@ -28,12 +28,39 @@ function createTitle(pokemon) {
     return cardTitleEl
 }
 
+function getSpritesValues(object) {
+
+    let unfilteredImages = Object.values(object)
+    let filteredImages = unfilteredImages.filter((element) => {
+        if (element) {
+            if (typeof(element) === "string") {
+                return element
+            }
+        }
+    })
+    return filteredImages
+}
+
 function createImg(pokemon) {
     const imgEl = document.createElement("img")
+
+    let filteredImages = getSpritesValues(pokemon.sprites)
 
     imgEl.setAttribute("width", "246")
     imgEl.setAttribute("class", "card--img")
     imgEl.setAttribute("src", pokemon.sprites.front_default)
+
+    // Changing pokemon image on click
+    let counter = 0
+    imgEl.addEventListener('click', () => {
+        console.log(counter)
+        if (counter < filteredImages.length) {
+            imgEl.setAttribute("src", filteredImages[counter])
+            counter++
+        } else {
+            counter = 0;
+        }
+    })
 
     return imgEl
 }
@@ -50,11 +77,6 @@ function createStats(pokemon, index) {
         statsNeeded.push(`${pokemon.stats[stat].stat.name}: ${pokemon.stats[stat].base_stat}`)
         pokemonStats[stat].textContent = statsNeeded[stat]
     }
-
-
-    console.log(statsNeeded)
-    console.log(pokemonStats)
-
     return pokemonStats[index]
 }
 
